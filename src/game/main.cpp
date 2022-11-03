@@ -1,3 +1,7 @@
+/*
+	Creates the main screen for the game to work
+*/
+
 #include "jellybeanengine/jellybeanengine.h"
 #include <iostream>
 #include <string>
