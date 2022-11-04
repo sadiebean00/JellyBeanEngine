@@ -1,3 +1,6 @@
+/**
+ * Creates the component class
+ */
 #include "Component.h"
 #include "Entity.h"
 

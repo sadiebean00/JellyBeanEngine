@@ -1,3 +1,7 @@
+/*
+	Creates the triangle renderer class
+*/
+
 #include "TriangleRenderer.h"
 
 namespace JellyBean_Engine
