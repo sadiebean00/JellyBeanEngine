@@ -43,6 +43,8 @@ add_library(jellybeanengine
 	src/jellybeanengine/Entity.cpp
 	src/jellybeanengine/Component.cpp
 	src/jellybeanengine/TriangleRenderer.cpp
+	src/jellybeanengine/Transform.h
+	src/jellybeanengine/Transform.cpp
 )
 
 set_target_properties(jellybeanengine PROPERTIES LINKER_LANGUAGE CXX)
@@ -51,4 +53,4 @@ add_executable(game
 	src/game/main.cpp
 )
 
-target_link_libraries (game jellybeanengine rend SDL2 SDL2main glew32 opengl32)
+target_link_libraries (game jellybeanengine rend SDL2 SDL2main glew32 opengl32 openal32)

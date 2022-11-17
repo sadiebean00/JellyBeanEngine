@@ -1,7 +1,17 @@
 #include "include/SDL.h"
+#include "AL/al.h"
+#include "AL/alc.h"
+
 #include <memory>
 #include <vector>
 
+/*
+*	Here we have our Core class which relies on the Entity class for some
+*	variables. Here we also initialise the screen that will be seen as well
+*	as the start and stop functions. We can also add entities in this
+*	class. We've also got a function that checks whether the screen is
+*	running.
+*/
 namespace JellyBean_Engine
 {
 	struct Entity;
