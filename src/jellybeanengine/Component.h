@@ -1,32 +1,52 @@
 #pragma once
 
 #include <memory>
-#include <string>
+#include <vector>
 
-/*
-*	This is our component class which creates a whole new struct named
-*	component. Here we have our onTick and onDisplay functions. We also
-*	utilise the Entity class which we need in order to get our Entity
-*	components.
-*/
+
 namespace JellyBean_Engine
 {
 	struct Entity;
-	
+	struct Core;
+	struct Transform;
+	struct Collision;
+	struct Controller;
+
+	/*
+	*	This is our Component class that holds all of the necessary
+	*	components for the development of my engine. In order to 
+	*	access these various commands, they need to be made public
+	*	by using the shared_ptr<> values as well as declaring the
+	*	various classes that we need.
+	*/
+
 	struct Component
 	{
-		virtual void onTick();
-		virtual void onDisplay();
-
 		std::shared_ptr<Entity> getEntity();
 
-	private:
-		friend struct Entity;
+		std::shared_ptr<Core> getCore();
 
-		std::weak_ptr<Entity> m_entity;
+		std::shared_ptr<Controller> getController();
+
+		std::weak_ptr<Entity> entity;
+
+		std::weak_ptr<Component> self;
+
+	private:
+
+		friend struct JellyBean_Engine::Entity;
+
+		virtual void onInit();
+		virtual void onBegin();
+		virtual void onTick();
+		virtual void onDisplay();
+		virtual void onCollision(std::shared_ptr<Collision> c);
 
 		void tick();
 		void display();
+		void begin();
+		void collision(std::shared_ptr<Collision> c);
+
+
 	};
 }
-

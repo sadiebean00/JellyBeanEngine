@@ -1,15 +1,32 @@
-/*
-	This stores the JellyBean Engine header files under one major file
-*/
+#pragma once
 
-#ifndef JELLYBEAN_ENGINE_H
-#define JELLYBEAN_ENGINE__H
-
-#include "D:\Uni Shit\Year 3\GEP\JellyBeanEngine\src\mathutils.h"
+#include "TriangleRenderer.h"
 #include "Core.h"
 #include "Entity.h"
 #include "Component.h"
-#include "TriangleRenderer.h"
-#include "Transform.h"
+#include "VertexBuffer.h"
+#include "VertexArray.h"
+#include "ShaderProgram.h"
+#include "AudioClip.h"
+#include "AudioSource.h"
+#include "Collision.h"
+#include "Resources.h"
+#include "Resource.h"
+#include "Model.h"
+#include "RendererModel.h"
+#include "Materials.h"
+#include "Texture.h"
+#include "Controller.h"
+#include "Triggers.h"
+#include "Camera.h"
+#include "GameEnvironment.h"
+#include "GameScreen.h"
 
-#endif
+#include <iostream>
+#include <memory>
+#include <vector>
+#include <glew.h>
+#include <GLM/glm.hpp>
+#include <GLM/gtc/matrix_transform.hpp>
+#include <GLM/gtc/type_ptr.hpp>
+#include <GLM/gtx/transform.hpp> 

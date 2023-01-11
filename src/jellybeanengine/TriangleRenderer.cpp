@@ -1,34 +1,52 @@
-/*
-*	The Triangle Render is used to display the triangle through the rend
-*	libraries and calls sets it to be a certain mesh. We also have our 
-*	onDisplay function being used to set the renderer for the screen to
-*	be at the window resolution. We then set the renderer and mesh before
-*	changing the projection and model. We then render the triangle.
-*/
-
 #include "TriangleRenderer.h"
+#include "Core.h"
+#include "Controller.h"
 #include "Entity.h"
 #include "Transform.h"
+#include "Camera.h"
 
 namespace JellyBean_Engine
 {
-	TriangleRenderer::TriangleRenderer() :
-		m_mesh(rend::Mesh::TRIANGLE),
-		m_shader(rend::Shader::BASIC)
+	TriangleRenderer::TriangleRenderer()
 	{
+		std::shared_ptr<VertexBuffer> positionsVbo = std::make_shared<VertexBuffer>();
+		positionsVbo->add(glm::vec3(0.0f, 0.5f, 0.0f));
+		positionsVbo->add(glm::vec3(-0.5f, -0.5f, 0.0f));
+		positionsVbo->add(glm::vec3(0.5f, -0.5f, 0.0f));
 
+		std::shared_ptr<VertexBuffer> colorVbo = std::make_shared<VertexBuffer>();
+		colorVbo->add(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+		colorVbo->add(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+		colorVbo->add(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+
+		vao = std::make_shared<VertexArray>();
+		vao->setBuffer(0, positionsVbo);
+		vao->setBuffer(1, colorVbo);
+
+		shader = std::make_shared<ShaderProgram>(
+			"D:/Uni Shit/Year 3/GEP/JellyBeanEngine/src/simpleVert.txt", 
+			"D:/Uni Shit/Year 3/GEP/JellyBeanEngine/src/whiteFragmentShader.txt");
 	}
+
+	void TriangleRenderer::onTick(){}
 
 	void TriangleRenderer::onDisplay()
 	{
-		rend::Renderer r(640, 480);
+		glUseProgram(shader->getId());
+		glBindVertexArray(vao->getId());
 
-		r.shader(&m_shader);
-		r.mesh(&m_mesh);
+		shader->setMat4("u_Model", getEntity()->getTransform()->getModel());
+		shader->setMat4("u_Projection", glm::perspective(glm::radians(45.0f),
+			800.0f / 600.0f, 0.1f, 100.0f));
+		shader->setMat4("u_View", glm::inverse(getCore()->getCamera()->getEntity()->getTransform()->getModel()));
 
-		r.projection(rend::perspective(rend::radians(45.0f), 1.0f, 0.1f, 100.0f));
-		r.model(getEntity()->getTransform()->getModel());
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 
-		r.render();
+		glBindVertexArray(0);
+		glUseProgram(0);
 	}
+
+	void TriangleRenderer::onBegin(){}
+
+
 }

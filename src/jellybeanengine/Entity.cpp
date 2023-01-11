@@ -1,39 +1,60 @@
 #include "Entity.h"
-#include "Component.h"
 #include "Core.h"
-#include "Transform.h"
+#include "Component.h"
+#include "Collision.h"
 
-/*
-*	This is where we set the tick function for the components to be running 
-*	through a for loop. A similar method takes place for the display function
-*	too. The getCore and getTransform both use lock methods to stop any
-*	potential leakages when it comes to the program.
-*/
 namespace JellyBean_Engine
 {
+
+	std::shared_ptr<Core> Entity::getCore()
+	{
+		return core.lock();
+	}
+
+	std::shared_ptr<Transform> Entity::getTransform()
+	{
+		return transform.lock();
+	}
+
+	std::shared_ptr<Component> Entity::getComponent()
+	{
+		for (size_t co = 0; co < components.size(); co++)
+		{
+			return components.at(co);
+
+		}
+	}
+
 	void Entity::tick()
 	{
-		for (size_t ci = 0; ci < m_components.size(); ++ci)
+		for (size_t co = 0; co < components.size(); co++)
 		{
-			m_components.at(ci)->tick();
+			components.at(co)->tick();
 		}
 	}
 
 	void Entity::display()
 	{
-		for (size_t ci = 0; ci < m_components.size(); ++ci)
+		for (size_t co = 0; co < components.size(); co++)
 		{
-			m_components.at(ci)->display();
+			components.at(co)->display();
 		}
 	}
 
-	std::shared_ptr<Core> Entity::getCore()
+	void Entity::begin()
 	{
-		return m_core.lock();
+		for (size_t co = 0; co < components.size(); co++)
+		{
+			components.at(co)->begin();
+		}
 	}
 
-	std::shared_ptr<Transform> Entity::getTransform()
+	void Entity::colliding(std::shared_ptr<Collision> c)
 	{
-		return m_transform.lock();
+		for (size_t co = 0; co < components.size(); co++)
+		{
+			components.at(co)->collision(c);
+		}
 	}
+
 }

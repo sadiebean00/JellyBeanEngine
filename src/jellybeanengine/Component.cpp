@@ -1,29 +1,27 @@
-/**
- *	Creates the component class. Here we call the onTick function (which
- *	shows how many ticks it takes for the engine to work correctly). We
- *	also have our onDisplay function, which takes the display function
- *	and tells us that the component is displayed. We also have our 
- *	getEntity component which locks our entities into place to prevent
- *	leaks in our system.
- */
-#include "Component.h"
+#pragma once
+
+#include "Core.h"
 #include "Entity.h"
-
-#include "AL/al.h"
-#include "AL/alc.h"
-
+#include "Component.h"
+#include "Transform.h"
 
 namespace JellyBean_Engine
 {
-	void Component::onTick()
+	std::shared_ptr<Entity> Component::getEntity()
 	{
-
+		return entity.lock();
 	}
 
-	void Component::onDisplay()
+	std::shared_ptr<Core> Component::getCore()
 	{
-
+		return entity.lock()->getCore();
 	}
+
+	void Component::onInit(){}
+	void Component::onBegin(){}
+	void Component::onTick(){}
+	void Component::onDisplay(){}
+	void Component::onCollision(std::shared_ptr<Collision> c){}
 
 	void Component::tick()
 	{
@@ -35,8 +33,18 @@ namespace JellyBean_Engine
 		onDisplay();
 	}
 
-	std::shared_ptr<Entity> Component::getEntity()
+	void Component::begin()
 	{
-		return m_entity.lock();
+		onBegin();
+	}
+
+	void Component::collision(std::shared_ptr<Collision> c)
+	{
+		onCollision(c);
+	}
+
+	std::shared_ptr<Controller> Component::getController()
+	{
+		return getCore()->getController();
 	}
 }

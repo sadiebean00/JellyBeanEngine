@@ -1,48 +1,78 @@
 #include "Transform.h"
+#include <GLM/ext.hpp>
 
 namespace JellyBean_Engine
 {
-	Transform::Transform() : m_scale(1, 1, 1)
+	Transform::Transform()
 	{
-
+		scale = glm::vec3(1.0f, 1.0f, 1.0f);
+		position = glm::vec3(0.0f, 0.0f, 0.0f);
+		rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 	}
 
-	/*
-	*	This gets the model for the transformation by setting the translate
-	*	to be where the matrix for rtn is as well as the position. We can
-	*	then set the rotation of the model to be specifically set to the 
-	*	different axis (x, y & z). Finally, we also set the scale to be
-	*	equivalent to the m_scale variable that we have.
-	*/
-	rend::mat4 Transform::getModel()
+	glm::mat4 Transform::getModel()
 	{
-		rend::mat4 rtn = rend::mat4(1.0f);
-
-		rtn = rend::translate(rtn, m_position);
-		rtn = rend::rotate(rtn, rend::radians(m_rotation.y), rend::vec3(0, 1, 0));
-		rtn = rend::rotate(rtn, rend::radians(m_rotation.x), rend::vec3(1, 0, 0));
-		rtn = rend::rotate(rtn, rend::radians(m_rotation.z), rend::vec3(0, 0, 1));
-
-		rtn = rend::scale(rtn, m_scale);
-
+		glm::mat4 rtn(1.0f);
+		rtn = glm::translate(rtn, position);
+		rtn = glm::rotate(rtn, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+		rtn = glm::rotate(rtn, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+		rtn = glm::rotate(rtn, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+		rtn = glm::scale(rtn, scale);
 		return rtn;
 	}
 
-	/*
-	*	This sets the position of the transform variable to be equivalent
-	*	to a vec3 that we set earlier.
-	*/
-	void Transform::setPosition(const rend::vec3& _position)
+	void Transform::setPosition(glm::vec3 _position)
 	{
-		m_position = _position;
+		position = _position;
 	}
 
-	/*
-	*	This sets the rotation of the transform variable to be equivalent
-	*	to a vec3 that we set earlier.
-	*/
-	void Transform::setRotation(const rend::vec3& _rotation)
+	void Transform::setRotation(glm::vec3 _rotation)
 	{
-		m_rotation = _rotation;
+		rotation = _rotation;
+	}
+
+	void Transform::setScale(glm::vec3 _scale)
+	{
+		scale = _scale;
+	}
+
+	void Transform::move(float _amount)
+	{
+		glm::mat4 model(1.0f);
+		model = glm::rotate(model, glm::radians(rotation.y), glm::vec3(0, 1, 0));
+		model = glm::rotate(model, glm::radians(rotation.x), glm::vec3(1, 0, 0));
+		model = glm::rotate(model, glm::radians(rotation.z), glm::vec3(0, 0, 1));
+		glm::vec3 fwd = glm::vec3(model * glm::vec4(0, 0, 1, 1));
+		position += fwd * _amount;
+	}
+
+	void Transform::move(glm::vec3 _amount)
+	{
+		glm::mat4 model(1.0f);
+		model = glm::rotate(model, glm::radians(rotation.y), glm::vec3(0, 1, 0));
+		model = glm::rotate(model, glm::radians(rotation.x), glm::vec3(1, 0, 0));
+		model = glm::rotate(model, glm::radians(rotation.z), glm::vec3(0, 0, 1));
+		glm::vec3 fwd = glm::vec3(model * glm::vec4(_amount, 1));
+		position += fwd;
+	}
+
+	void Transform::rotate(glm::vec3 _rotate)
+	{
+		rotation += _rotate;
+	}
+
+	glm::vec3 Transform::getPosition()
+	{
+		return position;
+	}
+
+	glm::vec3 Transform::getRotation()
+	{
+		return rotation;
+	}
+
+	glm::vec3 Transform::getScale()
+	{
+		return scale;
 	}
 }

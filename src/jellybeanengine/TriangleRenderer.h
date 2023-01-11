@@ -1,23 +1,47 @@
+#pragma once
+
+#include "glew.h"
+#include "SDL.h"
+#include <GLM/glm.hpp>
+#include <GLM/gtc/matrix_transform.hpp>
+#include <GLM/gtc/type_ptr.hpp>
+#include <GLM/gtx/transform.hpp> 
+#include <exception>
+#include <iostream>
+#include <memory>
 #include "Component.h"
+#include "VertexArray.h"
+#include "VertexBuffer.h"
+#include "ShaderProgram.h"
 
-#include "rend/rend.h"
-
-/*
-*	This is where the triangle renderer is created for the screen to be
-*	displayed. We reference our rend library in order to correctly load
-*	in the meshes and shaders. We also set the onDisplay function here
-*	for the triangle to be displayed correctly on screen.
-*/
 namespace JellyBean_Engine
 {
-	struct TriangleRenderer : public Component
+	struct VertexArray;
+	struct ShaderProgram;
+	struct Transform;
+
+	/*
+	*	This is the basic class for a triangle renderer. We can use this
+	*	as a basis for the model renderer as they use triangles to
+	*	render properly.
+	*/
+	
+	struct TriangleRenderer : Component
 	{
 		TriangleRenderer();
+		void onTick();
+		void onDisplay();
+		void onBegin();
 
 	private:
-		rend::Mesh m_mesh;
-		rend::Shader m_shader;
-
-		void onDisplay();
+		std::shared_ptr<ShaderProgram> shader;
+		std::shared_ptr<VertexArray> vao;
+		std::shared_ptr<VertexArray> cat;
 	};
+
+
+
+
+
+
 }
